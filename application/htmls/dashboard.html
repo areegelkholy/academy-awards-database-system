@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <video class="video-bg dimmed" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='background3.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="dashboard">
+        <h2 class="tangerine-bold">Welcome, {{ username }} !</h2>
+        <div class="grid">
+            <a href="{{ url_for('nominate', email=email) }}">➕ Add a Nomination</a>
+            <a href="{{ url_for('my_nominations', email=email) }}">📄 Check My Nominations</a>
+            <a href="{{ url_for('top_movies', email=email) }}">📊 Oscars’ Most Nominated of All Time</a>
+            <a href="{{ url_for('top_user_nominated_movies', email=email) }}">🏆 Top User Nominated Movies</a>
+            <a href="{{ url_for('person_awards', email=email) }}">⭐ Individual Oscar History</a>
+            <a href="{{ url_for('best_actor_category', email=email) }}"> 🧑‍💼 Countries of Best Actor Winners </a>
+            <a href="{{ url_for('staff_by_country', email=email) }}"> 🌍 Nominated Staff by Birth Country</a>
+            <a href="{{ url_for('dream_team', email=email) }}">🎬 Dream Team</a>
+            <a href="{{ url_for('top_companies', email=email) }}">🏢 Top Studios in Oscar History </a>
+            <a href="{{ url_for('non_english_oscar_winners', email=email) }}">🌐 Non-English Oscar Winners</a>
+        </div>
+    </div>
+
+    <audio id="clickSound" preload="auto">
+        <source src="{{ url_for('static', filename='click-sound.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const clickSound = document.getElementById('clickSound');
+            clickSound.volume = 1.0; 
+            const links = document.querySelectorAll('.grid a');
+
+            links.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();  
+                    clickSound.currentTime = 0;
+                    clickSound.play();
+
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 200);  
+                });
+            });
+        });
+    </script>
+</body>
+</html>

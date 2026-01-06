@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎥 My Nominations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("fade-in");
+    
+            const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+    
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute("href");
+                    document.body.classList.remove("fade-in");
+                    document.body.classList.add("fade-out");
+    
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500); 
+                });
+            });
+        });
+    </script>
+    
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            color: gold;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        li {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid gold;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        li strong {
+            color: #ffd700;
+        }
+
+        li em {
+            color: #ccc;
+        }
+
+        .empty-message {
+            font-size: 1.2em;
+            margin-top: 30px;
+            color: #aaa;
+        }
+
+        .back-link {
+            margin-top: 40px;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: bold;
+            color: gold;
+            border: 1px solid gold;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: gold;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎥 My Nominations</h1>
+
+    {% if nominations %}
+        <ul>
+        {% for n in nominations %}
+            <li>
+                <strong>Iteration {{ n[0] }}</strong><br>
+                🎬 <strong>{{ n[1] }}</strong> ({{ n[2] }})<br>
+                🏆 Category: <em>{{ n[3] }}</em><br>
+                {% if n[4] %}
+                    👤 Nominee: {{ n[4] }} {{ n[5] }}
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-message">You haven't submitted any nominations yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+
+</body>
+</html>

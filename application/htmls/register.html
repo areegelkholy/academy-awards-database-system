@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+
+    <div class="banner">
+        <div class="content">
+            <h2 class="ballet-header">Create a New Account</h2>
+            <form method="post">
+                <label>Email:</label><br>
+                <input type="email" name="email" required><br><br>
+
+                <label>Username:</label><br>
+                <input type="text" name="username" required><br><br>
+
+                <label>Gender (M/F):</label><br>
+                <input type="text" name="gender" maxlength="1" required><br><br>
+
+                <label>Birth Date:</label><br>
+                <input type="date" name="birthdate" required><br><br>
+
+                <label>Country:</label><br>
+                <input type="text" name="country" required><br><br>
+
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+            <br>
+            <a href="/" class="btn">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

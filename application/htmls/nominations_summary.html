@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎭 Person Award Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("fade-in");
+
+            const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+            const button = document.querySelector('button[type="submit"]');
+            const clickSound = document.getElementById('clickSound');
+
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute("href");
+
+                    if (clickSound) {
+                        clickSound.currentTime = 0;
+                        clickSound.play();
+                    }
+
+                    document.body.classList.remove("fade-in");
+                    document.body.classList.add("fade-out");
+
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500);
+                });
+            });
+
+            if (button) {
+                button.addEventListener('click', () => {
+                    if (clickSound) {
+                        clickSound.currentTime = 0;
+                        clickSound.play();
+                    }
+                });
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            color: gold;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1em;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+            width: 300px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: gold;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result-box {
+            margin-top: 30px;
+            border: 2px solid gold;
+            border-radius: 10px;
+            padding: 20px;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-link {
+            margin-top: 30px;
+            display: inline-block;
+            color: gold;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #000;
+            color: white;
+            border: 1px solid #aaa;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: white;
+        }
+
+        .select2-container--default .select2-results__option {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🏆 Oscar History by Person</h1>
+
+    <form method="POST" action="{{ url_for('person_awards', email=email) }}">
+        <select id="name" name="name" required>
+            <option></option>
+            {% for p in people %}
+                <option value="{{ p }}">{{ p }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="role" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="Actor">Actor</option>
+            <option value="Director">Director</option>
+        </select>
+
+        <button type="submit">View Summary</button>
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+        <h2>{{ result.name }} ({{ result.role }})</h2>
+        <p><strong>Total Nominations:</strong> {{ result.nominations }}</p>
+        <p><strong>Total Oscars:</strong> 🏆 {{ result.oscars }}</p>
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#name').select2({
+                placeholder: "Search name...",
+                allowClear: true,
+                width: 'resolve'
+            });
+        });
+    </script>
+</body>
+</html>

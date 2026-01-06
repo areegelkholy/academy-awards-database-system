@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🌍 Non-English Oscar Winners</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("fade-in");
+    
+            const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+    
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute("href");
+                    document.body.classList.remove("fade-in");
+                    document.body.classList.add("fade-out");
+    
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500); 
+                });
+            });
+        });
+    </script>
+    
+</head>
+<body style="background-color: black; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 40px;">
+
+    <h2 style="color: gold; font-size: 2.2em; margin-bottom: 10px;">
+        🌍 Non-English Movies That Took Home the Gold
+    </h2>
+
+    <p style="font-size: 1.2em; color: #f1f1f1; margin-bottom: 30px;">
+        Celebrating international cinema that broke language barriers and won Oscars! 🏆
+    </p>
+
+    <div style="max-height: 500px; overflow-y: auto; margin: 0 auto; width: 90%; border: 2px solid gold; border-radius: 10px;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="position: sticky; top: 0; background-color: gold; color: black;">
+                <tr>
+                    <th style="padding: 12px; border: 1px solid #444;">Movie</th>
+                    <th style="padding: 12px; border: 1px solid #444;">Release Year</th>
+                    <th style="padding: 12px; border: 1px solid #444;">Language</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in non_english_movies %}
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #333;">{{ movie[0] }}</td>
+                    <td style="padding: 10px; border: 1px solid #333;">{{ movie[1] }}</td>
+                    <td style="padding: 10px; border: 1px solid #333;">{{ movie[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ url_for('dashboard', email=email) }}" style="color: gold; display: inline-block; margin-top: 30px; font-weight: bold;">← Back to Dashboard</a>
+
+</body>
+</html>

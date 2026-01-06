@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🏆 Most Nominated Movies by Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 40px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: gold;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 0 auto;
+            width: 90%;
+            border: 2px solid gold;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: gold;
+            color: black;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        tr {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        tr:nth-child(n+2) {
+            animation-delay: calc(0.05s * var(--i));
+        }
+
+        .back-link {
+            margin-top: 30px;
+            display: inline-block;
+            color: gold;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 Most Nominated User Picks by Category & Year</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Iteration Number</th>
+                    <th>Iteration Year</th>
+                    <th>Category</th>
+                    <th>Movie</th>
+                    <th>Total Nominations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in nominations %}
+                <tr style="--i: {{ loop.index }}">
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+
+</body>
+</html>

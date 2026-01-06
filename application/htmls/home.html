@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oscars App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <video class="video-bg full-bright" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='canvaback.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="banner">
+        <div class="content">
+            <h2>Welcome to the Academy Awards Archive</h2>
+            <p>This is your backstage pass to over 90 years of Oscars magic. From unforgettable wins to fan-favorite performances, track movies, actors, and directors that shaped cinematic history — and add your own nominations too!</p>
+            <div class="buttons">
+                <a href="/login" class="btn">Login</a>
+                <a href="/register" class="btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <audio id="entrySound" preload="auto">
+        <source src="{{ url_for('static', filename='login-sound.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const audio = document.getElementById("entrySound");
+            if (!sessionStorage.getItem("playedEntrySound")) {
+                const playSound = () => {
+                    audio.volume = 0.5;
+                    audio.play().then(() => {
+                    }).catch(() => {
+                        document.body.addEventListener("click", () => {
+                            audio.play();
+                        }, { once: true });
+                    });
+                };
+                playSound();
+            }
+        });
+    </script>
+
+</body>
+</html>

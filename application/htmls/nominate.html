@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit a Nomination</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 40px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: gold;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        form {
+            animation: bounceIn 1.2s ease;
+        }
+
+        select, input {
+            width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: gold;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .select2-container .select2-selection--single {
+            background-color: #000;
+            color: white;
+            border: 1px solid #aaa;
+        }
+
+        .select2-container--default .select2-results__option {
+            color: black;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: white;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-msg {
+            margin-top: 20px;
+            background-color: #1a1a1a;
+            border: 2px solid gold;
+            padding: 15px;
+            border-radius: 10px;
+            color: gold;
+            font-weight: bold;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            animation: zoomIn 0.7s ease;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 30px;
+            color: gold;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            60% {
+                transform: translateY(10px);
+            }
+            80% {
+                transform: translateY(-5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎥 Submit a Nomination</h1>
+    <p>Nominating as: <strong>{{ email }}</strong></p>
+
+    {% if request.method == 'POST' %}
+        <div class="success-msg">✅ Nomination submitted successfully!</div>
+    {% endif %}
+
+    <form method="POST">
+        <label for="iteration">Iteration:</label><br>
+        <select id="iteration" name="iteration" class="select2" required data-placeholder="Search iteration...">
+            <option></option>
+            {% for i in iterations %}
+                <option value="{{ i[0] }}" {% if i[0] == selected_iteration %}selected{% endif %}>
+                    {{ i[0] }} ({{ i[1] }})
+                </option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="category">Category:</label><br>
+        <select id="category" name="category" class="select2" required data-placeholder="Search category...">
+            <option></option>
+            {% for c in categories %}
+                <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="movie">Movie:</label><br>
+        <select id="movie" name="movie" class="select2" required data-placeholder="Search movie...">
+            <option></option>
+            {% for m in movies %}
+                <option value="{{ m }}">{{ m }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <div id="person-group" class="hidden">
+            <label for="person">Person:</label><br>
+            <select id="person" name="person" class="select2" data-placeholder="Search person...">
+                <option></option>
+            </select><br><br>
+        </div>
+
+        <button type="submit">Submit Nomination</button>
+    </form>
+
+    <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                allowClear: true,
+                width: 'resolve'
+            });
+
+            const personCategories = {{ person_categories | tojson | safe }};
+            const people = {{ people | tojson | safe }};
+            const personSelect = $('#person');
+            const categorySelect = $('#category');
+            const personGroup = $('#person-group');
+
+            function updatePersonField() {
+                const selectedCategory = categorySelect.val();
+                if (personCategories.includes(selectedCategory)) {
+                    const role = selectedCategory.includes("Direct") ? "Director" : "Actor";
+                    const options = people[role] || [];
+
+                    personSelect.empty().append('<option></option>');
+                    for (const p of options) {
+                        personSelect.append(new Option(p, p));
+                    }
+
+                    personGroup.removeClass("hidden");
+                } else {
+                    personGroup.addClass("hidden");
+                    personSelect.empty();
+                }
+            }
+
+            categorySelect.on('change', updatePersonField);
+            updatePersonField();
+        });
+    </script>
+
+</body>
+</html>

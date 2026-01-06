@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Actor Origins</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("fade-in");
+    
+            const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+    
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute("href");
+                    document.body.classList.remove("fade-in");
+                    document.body.classList.add("fade-out");
+    
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500); 
+                });
+            });
+        });
+    </script>
+    
+</head>
+<body>
+    <h2 style="text-align: center; color: gold; margin-top: 40px;">
+        🌍 Top 5 Birth Countries of Best Actor Oscar Winners
+    </h2>
+
+    <table style="margin: 40px auto; border-collapse: collapse; width: 60%; color: white; font-size: 1.1em;">
+        <thead style="background-color: gold; color: black;">
+            <tr>
+                <th style="padding: 10px; border: 1px solid #ccc;">Country</th>
+                <th style="padding: 10px; border: 1px solid #ccc;">Number of Wins</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for country, count in top_countries %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ country }}</td>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="text-align: center;">
+        <a href="{{ url_for('dashboard', email=email) }}" style="color: gold; text-decoration: underline;">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

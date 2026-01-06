@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Stars by Country</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("fade-in");
+    
+            const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+    
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute("href");
+                    document.body.classList.remove("fade-in");
+                    document.body.classList.add("fade-out");
+    
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500); 
+                });
+            });
+        });
+    </script>
+    
+    <style>
+        body {
+            background-color: black;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h2.title {
+            color: gold;
+            font-size: 2.3em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #f1f1f1;
+            margin-bottom: 30px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
+            width: 250px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: gold;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .scroll-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: gold;
+            color: black;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        .back-link {
+            margin-top: 30px;
+            display: inline-block;
+            color: gold;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">🍿 Born to Be Nominated: Staff Stars from Around the Globe!</h2>
+
+    {% if country %}
+    <p class="subtitle">🎬 Straight from {{ country }} to the red carpet!</p>
+    {% endif %}
+
+    <form method="get" action="{{ url_for('staff_by_country') }}">
+        <select name="country" required>
+            <option value="">Select a country</option>
+            {% for c in countries %}
+            <option value="{{ c }}" {% if c == country %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="email" value="{{ email }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+    <div class="scroll-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Category</th>
+                    <th>Nominations</th>
+                    <th>Wins</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif country %}
+        <p>No nominations found for staff born in "{{ country }}"</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎬 Dream Team Lineup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        video.video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .dashboard {
+            padding: 50px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            color: #FFD700;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #f0e68c;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 20px;
+            width: 280px;
+            backdrop-filter: blur(3px);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            font-size: 1.4em;
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            margin: 6px 0;
+            font-size: 1em;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+
+        .tangerine-title {
+                font-family: 'Tangerine', cursive;
+                font-size: 2.3em;
+                font-weight: 700;
+                color: gold;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                margin-bottom: 10px;
+                    }
+
+    </style>
+</head>
+<body class="fade-in">
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='background2.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="dashboard">
+        <h1>🌟 Dream Team: Ultimate Living Legends</h1>
+        <p class="subtitle">Curated from the finest Oscar-winning talent still walking the red carpet!</p>
+
+        <div class="card-container">
+            {% for person in dream_team %}
+            <div class="card">
+                <h2 class="tangerine-title">{{ person.role }}</h2>
+                <p><strong>Name:</strong> {{ person.name }}</p>
+                <p><strong>Birthdate:</strong> {{ person.birthdate }}</p>
+                <p><strong>Oscar Wins:</strong> 🏆 {{ person.wins }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Nominated Movies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("fade-in");
+    
+            const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+    
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute("href");
+                    document.body.classList.remove("fade-in");
+                    document.body.classList.add("fade-out");
+    
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500); 
+                });
+            });
+        });
+    </script>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            color: gold;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            color: #ccc;
+        }
+
+        .movie-list-container {
+            max-height: 400px; 
+            overflow-y: auto;
+            margin-top: 30px;
+            padding-right: 10px;
+        }
+
+        .movie-box {
+            border: 2px solid gold;
+            border-radius: 8px;
+            margin: 10px auto;
+            padding: 15px;
+            width: 60%;
+            font-size: 1.1em;
+        }
+
+        .movie-box strong {
+            color: white;
+        }
+
+        .back-link {
+            margin-top: 30px;
+            display: inline-block;
+            color: gold;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎬 Top 10 Nominated Movies</h1>
+    <p class="subtitle">Celebrating the most Oscar-nominated films of all time 🏆</p>
+
+    <div class="movie-list-container">
+        {% for movie in movies %}
+            <div class="movie-box">
+                <strong>{{ movie[0] }}</strong> ({{ movie[1] }}) — 🏆 {{ movie[2] }} nominations
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ url_for('dashboard', email=email) }}" class="back-link">← Back to Dashboard</a>
+
+</body>
+</html>
